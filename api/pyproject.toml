@@ -1,0 +1,25 @@
+[project]
+name = "API for Tech Challange"
+version = "0.1.0"
+description = "API to collect real estate data" 
+authors = [
+    {name = "Evandro Viero", email= "evandro.viero@gmail.com"}
+]
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ["migrations"]
+
+[tool.ruff.lint]
+preview = true
+select = ["I", "F", "E", "W", "PL", "PT"]
+
+[tool.ruff.format]
+preview = true
+quote-style = "double"
+
+[tool.taskipy.tasks]
+lint = "ruff check"
+lint_fix = "ruff check --fix"
+format = "ruff format"
+run_api = "uvicorn app:app --reload"
