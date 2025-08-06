@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from routers import router as houses_router
+from api.routers import router as houses_router
 
 app = FastAPI(
     title="Tech Challenge API",
