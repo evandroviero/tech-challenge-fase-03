@@ -80,3 +80,62 @@ Documentação Swagger:
 ```
 http://127.0.0.1:8000/docs
 ```
+
+
+## Estrutura do Tech Challenge
+
+1) Qual é o seu problema?
+    * Reg.
+    * Class
+    * Série temporal
+
+2) Coleta de dados
+    * Data SUS
+    * Kaggle
+    * Crawler e varrer a internet
+    * Trabalhar com APIs
+    * Banco de dados estruturados
+    * Dados OMS
+    * Drive Org
+    * ETC (infinitas fontes de dados)
+
+3) Armazenamento    
+    * Estruturado
+        * MySQL
+        * Postgres
+        * SQL Server
+        * XLSX
+    * Não estruturado
+        * JSON
+        * Avro
+        * E-mails
+        * MP3
+        * PDF
+
+4) Analisar
+    * Qual é o comportamento do seu dado?
+    * Quais são as particularidades?
+    * Como são as distribuições?
+    * Como são as correlações entre as variáveis?
+    * Existem sazonalidades?
+    * Sempre de acordo com o contexto!
+    * Análises estatísticas: médias, medianas, desvios, outliers, etc
+
+5) Processamento dos dados (se necessário)
+    * Enriquecimento dos dados
+    * Tratamento de registros nulos
+    * Enriquecimento de chave x valor
+    * Cálculo
+    * Escalas (alguns modelos não trabalham bem com os dados em escalas diferentes)
+
+6) Modelagem
+    * Escolher o modelo
+    * Testar os modelos (entendendo as métricas de avaliação adequada)
+    * Comparar as "versões" do modelo (baseado nas métricas)
+    * Interpretar os resultados: Escolha seu modelo "campeão"
+
+7) Deploy
+    * Fazer uso do modelo criado
+    * Páginas Web com input para o modelo
+    * Modelo respondendo input de API
+    * PowerBI (normalmente para classificação)

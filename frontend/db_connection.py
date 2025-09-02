@@ -1,19 +1,21 @@
-import sqlite3
-import pandas as pd
+import sys
+from pathlib import Path
+from sqlalchemy import text
 
-def get_connection(db_path="db/database.db"):
-    """
-    Retorna uma conexão com o banco SQLite.
-    """
-    conn = sqlite3.connect(db_path)
-    return conn
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
+from api.database import get_session
 
 def get_cities():
     """
-    Retorna uma lista com todas as cidades distintas do banco.
+    Retorna lista de cidades distintas da tabela 'houses', ordenadas alfabeticamente.
+    Remove valores None automaticamente.
     """
-    conn = get_connection()
-    query = "SELECT DISTINCT city FROM houses ORDER BY city;"  # ajuste o nome da tabela
-    cities_df = pd.read_sql_query(query, conn)
-    conn.close()
-    return cities_df["city"].tolist()
+    session = next(get_session())
+    try:
+        result = session.execute(text("SELECT DISTINCT city FROM houses ORDER BY city;"))
+        return [row[0] for row in result.fetchall() if row[0] is not None]
+    finally:
+        session.close()
