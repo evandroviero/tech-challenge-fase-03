@@ -47,3 +47,16 @@ class HousePartialUpdate(BaseModel):
 class HouseList(BaseModel):
     houses: list[HousePublic]
 
+
+class PredictSchema(BaseModel):
+    city: str
+    area: int
+    rooms: Optional[int] = 0
+    bathroom: Optional[int] = 0
+    parking_spaces: Optional[int] = 0
+    floor: Optional[int] = 0
+    animal: Optional[int] = 0
+    furniture: Optional[int] = 0
+    hoa: Optional[int] = 0
+    property_tax: Optional[int] = 0
+    fire_insurance: Optional[int] = 0

@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 from db_connection import get_cities
+import requests
 
 model = joblib.load("model/rent_model.pkl")
 
@@ -30,28 +31,24 @@ with col3:
     property_tax = st.number_input("IPTU (R$)", min_value=0, max_value=5000, value=200)
     fire_insurance = st.number_input("Seguro Incêndio (R$)", min_value=0, max_value=2000, value=50)
 
-with col4:
-    total = st.number_input("Total (R$)", min_value=0, max_value=20000, value=1000)
-    price_m2 = st.number_input("Preço por m² (R$)", min_value=0, max_value=1000, value=20)
+input_data = {
+    "city": city,
+    "area": area,
+    "rooms": rooms,
+    "bathroom": bathroom,
+    "parking_spaces": parking_spaces,
+    "floor": floor,
+    "animal": 1 if animal == "yes" else 0,
+    "furniture": 1 if furniture == "yes" else 0,
+    "hoa": hoa,
+    "property_tax": property_tax,
+    "fire_insurance": fire_insurance,
+}
 
-# Criar DataFrame com os inputs
-input_data = pd.DataFrame({
-    "city": [city],
-    "area": [area],
-    "rooms": [rooms],
-    "bathroom": [bathroom],
-    "parking_spaces": [parking_spaces],
-    "floor": [floor],
-    "animal": [animal],
-    "furniture": [furniture],
-    "hoa": [hoa],
-    "property_tax": [property_tax],
-    "fire_insurance": [fire_insurance],
-    "total": [total],
-    "price_m2": [price_m2]
-})
-
-# Botão para prever
 if st.button("Prever Aluguel"):
-    predicted_rent = model.predict(input_data)[0]
-    st.markdown(f"<h2 style='color: green;'>💵 Valor do aluguel previsto: R${predicted_rent:,.2f}</h2>", unsafe_allow_html=True)
+    base_url = "http://127.0.0.1:8000"
+    endpoint = "/api/v1/housespredict/"
+
+    response = requests.post(f"{base_url}{endpoint}", json=input_data)
+    predicted_rent = response.json().get("predicted_rent")
+    st.markdown(f"<h2 style='color: green;'>💵 Valor do aluguel previsto: R${predicted_rent}</h2>", unsafe_allow_html=True)

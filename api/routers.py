@@ -1,14 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+import joblib
+import pandas as pd
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from api.database import get_session
 from api.models import House
-from api.schemas import HouseList, HousePartialUpdate, HousePublic, HouseSchema
+from api.schemas import HouseList, HousePartialUpdate, HousePublic, HouseSchema, PredictSchema
 
 router = APIRouter(
     prefix="/api/v1/houses",
     tags=["houses"],
 )
+
+RENT_MODEL = joblib.load("model/rent_model.pkl")
 
 @router.post(
     path="register/",
@@ -112,3 +116,20 @@ def delete_house(house_id: int, session: Session = Depends(get_session)):
             detail="House not found")
     session.delete(query)
     session.commit()
+
+
+@router.post(
+    path="predict/",
+    summary="Predict rental cost based on property features",
+    response_description="Predicted rental cost",  
+    status_code=status.HTTP_200_OK,
+)
+def predict_rent(house: PredictSchema, session: Session = Depends(get_session)):
+    input_data = pd.DataFrame([house.model_dump()])
+    predicted_rent = float(RENT_MODEL.predict(input_data)[0])
+    house_db = House(**house.model_dump(), rent_amount=predicted_rent)
+    
+    session.add(house_db)
+    session.commit()
+    session.refresh(house_db)
+    return {"predicted_rent": predicted_rent}
