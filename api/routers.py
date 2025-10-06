@@ -117,7 +117,6 @@ def delete_house(house_id: int, session: Session = Depends(get_session)):
     session.delete(query)
     session.commit()
 
-
 @router.post(
     path="predict/",
     summary="Predict rental cost based on property features",
